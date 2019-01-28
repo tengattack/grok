@@ -7,15 +7,16 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strconv"
 	"strings"
 	"sync"
+
+	regexp "github.com/tengattack/gonigmo"
 )
 
 var (
 	canonical = regexp.MustCompile(`%{(\w+(?::\w+(?::\w+)?)?)}`)
-	normal    = regexp.MustCompile(`%{([\w-.]+(?::[\w-.]+(?::[\w-.]+)?)?)}`)
+	normal    = regexp.MustCompile(`%{([\w\-\.]+(?::[\w\-\.]+(?::[\w\-\.]+)?)?)}`)
 	symbolic  = regexp.MustCompile(`\W`)
 )
 
@@ -310,11 +311,11 @@ func (g *Grok) compile(pattern string) (*gRegexp, error) {
 		return nil, err
 	}
 
-	compiledRegex, err := regexp.Compile(newPattern)
+	compiledRegex, err := regexp.CompileWithOptionNonThreadsafe(newPattern, regexp.ONIG_OPTION_CAPTURE_GROUP)
 	if err != nil {
 		return nil, err
 	}
-	gr = &gRegexp{regexp: compiledRegex, typeInfo: ti}
+	gr = &gRegexp{regexp: compiledRegex.MakeThreadsafe(), typeInfo: ti}
 
 	g.compiledGuard.Lock()
 	g.compiledPatterns[pattern] = gr
@@ -348,7 +349,7 @@ func (g *Grok) denormalizePattern(pattern string, storedPatterns map[string]*gPa
 
 		var buffer bytes.Buffer
 		if !g.config.NamedCapturesOnly || (g.config.NamedCapturesOnly && len(names) > 1) {
-			buffer.WriteString("(?P<")
+			buffer.WriteString("(?<")
 			buffer.WriteString(alias)
 			buffer.WriteString(">")
 			buffer.WriteString(storedPattern.expression)
