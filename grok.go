@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	regexp "github.com/tengattack/gonigmo"
+	regexp "github.com/ungerik/gonigmo"
 )
 
 var (

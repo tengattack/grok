@@ -8,16 +8,23 @@
 # grok
 A simple library to parse grok patterns with Go.
 
+Using [`gonigmo`](https://github.com/ungerik/gonigmo) as regexp library.
+
 # Installation
+
 Make sure you have a working Go environment.
 
+Follow the instruction in [`ungerik/gonigmo`](https://github.com/ungerik/gonigmo) to install `gonigmo` library.
+
 ```sh
-go get github.com/vjeantet/grok
+go get github.com/tengattack/grok
 ```
+
+**IMPORTANT: `ParseToMultiMap` NOT WORKING NOW**
 
 # Use in your project
 ```go
-import "github.com/vjeantet/grok"
+import "github.com/tengattack/grok"
 ```
 
 # Usage
@@ -45,7 +52,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/vjeantet/grok"
+	"github.com/tengattack/grok"
 )
 
 func main() {
@@ -94,7 +101,7 @@ package main
 import (
   "fmt"
 
-  "github.com/vjeantet/grok"
+  "github.com/tengattack/grok"
 )
 
 func main() {
